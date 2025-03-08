@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Update Test Results</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Patient Information</h5>
+                        <p><strong>Name:</strong> {{ report.user.get_full_name }}</p>
+                        <p><strong>Service:</strong> {{ report.service.name }}</p>
+                        <p><strong>Date:</strong> {{ report.booking.date }}</p>
+                    </div>
+
+                    <form method="post" id="resultsForm">
+                        {% csrf_token %}
+                        <div id="testResults">
+                            {% for result in report.test_results.all %}
+                            <div class="test-result mb-4">
+                                <h6>Test Parameter</h6>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Parameter Name</label>
+                                            <input type="text" class="form-control" name="parameter" value="{{ result.parameter }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label class="form-label">Value</label>
+                                            <input type="text" class="form-control" name="value" value="{{ result.value }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label class="form-label">Unit</label>
+                                            <input type="text" class="form-control" name="unit" value="{{ result.unit }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Reference Range</label>
+                                            <input type="text" class="form-control" name="reference_range" value="{{ result.reference_range }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label class="form-label">Abnormal</label>
+                                            <select class="form-select" name="is_abnormal">
+                                                <option value="false" {% if not result.is_abnormal %}selected{% endif %}>No</option>
+                                                <option value="true" {% if result.is_abnormal %}selected{% endif %}>Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Notes</label>
+                                    <textarea class="form-control" name="notes" rows="2">{{ result.notes }}</textarea>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-outline-primary" id="addParameter">
+                                Add Parameter
+                            </button>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Save Results</button>
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('addParameter').addEventListener('click', function() {
+    const template = `
+        <div class="test-result mb-4">
+            <h6>Test Parameter</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Parameter Name</label>
+                        <input type="text" class="form-control" name="parameter" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label class="form-label">Value</label>
+                        <input type="text" class="form-control" name="value" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label class="form-label">Unit</label>
+                        <input type="text" class="form-control" name="unit" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label">Reference Range</label>
+                        <input type="text" class="form-control" name="reference_range" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label class="form-label">Abnormal</label>
+                        <select class="form-select" name="is_abnormal">
+                            <option value="false" selected>No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Notes</label>
+                <textarea class="form-control" name="notes" rows="2"></textarea>
+            </div>
+        </div>
+    `;
+    document.getElementById('testResults').insertAdjacentHTML('beforeend', template);
+});
+
+document.getElementById('resultsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const results = [];
+    const testResults = document.querySelectorAll('.test-result');
+    
+    testResults.forEach(result => {
+        results.push({
+            parameter: result.querySelector('[name="parameter"]').value,
+            value: result.querySelector('[name="value"]').value,
+            unit: result.querySelector('[name="unit"]').value,
+            reference_range: result.querySelector('[name="reference_range"]').value,
+            is_abnormal: result.querySelector('[name="is_abnormal"]').value === 'true',
+            notes: result.querySelector('[name="notes"]').value
+        });
+    });
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'results';
+    input.value = JSON.stringify(results);
+    this.appendChild(input);
+    this.submit();
+});
+</script>
+{% endblock %}
+{% endblock %} 

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Appointments</h2>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if bookings %}
+    <div class="row">
+        {% for booking in bookings %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ booking.service.name }}</h5>
+                    <span class="badge {% if booking.status == 'completed' %}bg-success
+                                     {% elif booking.status == 'pending' %}bg-warning
+                                     {% elif booking.status == 'cancelled' %}bg-danger
+                                     {% else %}bg-secondary{% endif %}">
+                        {{ booking.status|title }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p class="mb-1"><strong>Date:</strong> {{ booking.date }}</p>
+                        <p class="mb-1"><strong>Time:</strong> {{ booking.time }}</p>
+                        <p class="mb-1"><strong>Price:</strong> ₹{{ booking.service.price }}</p>
+                        <p class="mb-0"><strong>Duration:</strong> {{ booking.service.duration }}</p>
+                    </div>
+
+                    {% if booking.status == 'pending' %}
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'reschedule_booking' booking.id %}" class="btn btn-primary">
+                            <i class="fas fa-calendar-alt"></i> Reschedule
+                        </a>
+                        <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                    {% elif booking.status == 'completed' and booking.report %}
+                    <div class="d-grid">
+                        <a href="{% url 'download_report' booking.report.id %}" class="btn btn-success">
+                            <i class="fas fa-download"></i> Download Report
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {% if booking.status == 'cancelled' and booking.cancellation_reason %}
+                    <div class="mt-3">
+                        <p class="text-muted mb-0">
+                            <small><strong>Cancellation Reason:</strong> {{ booking.cancellation_reason }}</small>
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>You don't have any appointments yet.</p>
+        <a href="{% url 'service_list' %}" class="btn btn-primary">Book an Appointment</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

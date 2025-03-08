@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <h1 class="hero-title">Welcome to Modern Lab Management</h1>
+                <p class="hero-subtitle">Experience seamless healthcare diagnostics with our state-of-the-art laboratory management system.</p>
+                {% if not user.is_authenticated %}
+                    <div class="d-grid gap-2 d-md-flex">
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-md-2" data-aos="fade-up" data-aos-delay="200">
+                            Get Started
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg" data-aos="fade-up" data-aos-delay="300">
+                            Login
+                        </a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'service_list' %}" class="btn btn-primary btn-lg" data-aos="fade-up" data-aos-delay="200">
+                        View Services
+                    </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <img src="{% static 'images/lab-illustration.svg' %}" alt="Lab Illustration" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5" data-aos="fade-up">Our Features</h2>
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card">
+                    <i class="fas fa-flask feature-icon"></i>
+                    <h3>Advanced Testing</h3>
+                    <p class="text-secondary">Access to a wide range of laboratory tests with state-of-the-art equipment.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card">
+                    <i class="fas fa-clock feature-icon"></i>
+                    <h3>Quick Results</h3>
+                    <p class="text-secondary">Get your test results quickly and securely through our online portal.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card">
+                    <i class="fas fa-user-md feature-icon"></i>
+                    <h3>Expert Staff</h3>
+                    <p class="text-secondary">Our qualified professionals ensure accurate and reliable test results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Preview Section -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>Our Services</h2>
+            <p class="text-secondary">Discover our comprehensive range of laboratory services</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-heartbeat mb-3 feature-icon"></i>
+                        <h4>Blood Tests</h4>
+                        <p class="text-secondary">Comprehensive blood analysis for various health parameters.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-microscope mb-3 feature-icon"></i>
+                        <h4>Pathology</h4>
+                        <p class="text-secondary">Detailed pathological examinations and reports.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-x-ray mb-3 feature-icon"></i>
+                        <h4>Imaging</h4>
+                        <p class="text-secondary">Advanced imaging services for accurate diagnostics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="{% url 'service_list' %}" class="btn btn-primary btn-lg">View All Services</a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-center">
+                    <h2 class="display-4 fw-bold text-primary">5000+</h2>
+                    <p class="text-secondary">Satisfied Patients</p>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center">
+                    <h2 class="display-4 fw-bold text-primary">50+</h2>
+                    <p class="text-secondary">Lab Services</p>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="text-center">
+                    <h2 class="display-4 fw-bold text-primary">24/7</h2>
+                    <p class="text-secondary">Available Support</p>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="text-center">
+                    <h2 class="display-4 fw-bold text-primary">99%</h2>
+                    <p class="text-secondary">Accuracy Rate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+{% endblock %}

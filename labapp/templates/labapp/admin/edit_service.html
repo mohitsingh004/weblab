@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">{% if service %}Edit{% else %}Add New{% endif %} Service</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Service Name</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ service.name|default:'' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="blood" {% if service.category == 'blood' %}selected{% endif %}>Blood Test</option>
+                                <option value="urine" {% if service.category == 'urine' %}selected{% endif %}>Urine Test</option>
+                                <option value="imaging" {% if service.category == 'imaging' %}selected{% endif %}>Imaging</option>
+                                <option value="other" {% if service.category == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price (₹)</label>
+                                    <input type="number" class="form-control" id="price" name="price" 
+                                           value="{{ service.price|default:'' }}" step="0.01" min="0" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="duration" class="form-label">Duration (e.g., P1DT2H)</label>
+                                    <input type="text" class="form-control" id="duration" name="duration" 
+                                           value="{{ service.duration|default:'P0DT1H' }}" required
+                                           pattern="P(\d+D)?T(\d+H)?" title="Format: P[days]DT[hours]H">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="3" required>{{ service.description|default:'' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="preparation" class="form-label">Preparation Instructions</label>
+                            <textarea class="form-control" id="preparation" name="preparation_instructions" 
+                                      rows="3">{{ service.preparation_instructions|default:'' }}</textarea>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="is_active" name="is_active"
+                                   {% if service.is_active|default:True %}checked{% endif %}>
+                            <label class="form-check-label" for="is_active">Active</label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                {% if service %}Update{% else %}Create{% endif %} Service
+                            </button>
+                            <a href="{% url 'manage_services' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('duration').addEventListener('input', function(e) {
+    const value = e.target.value.toUpperCase();
+    const pattern = /^P(\d+D)?T(\d+H)?$/;
+    
+    if (!pattern.test(value)) {
+        e.target.setCustomValidity('Please use the format P[days]DT[hours]H (e.g., P1DT2H)');
+    } else {
+        e.target.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}
+{% endblock %} 

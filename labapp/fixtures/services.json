@@ -1,0 +1,57 @@
+[
+    {
+        "model": "labapp.service",
+        "pk": 1,
+        "fields": {
+            "name": "Complete Blood Count (CBC)",
+            "description": "Detailed analysis of red/white blood cells and platelets",
+            "price": "2500.00",
+            "duration": "P1DT2H",
+            "is_active": true
+        }
+    },
+    {
+        "model": "labapp.service",
+        "pk": 2,
+        "fields": {
+            "name": "MRI Scan",
+            "description": "3T Magnetic Resonance Imaging with contrast",
+            "price": "12500.00",
+            "duration": "P2DT4H",
+            "is_active": true
+        }
+    },
+    {
+        "model": "labapp.service",
+        "pk": 3,
+        "fields": {
+            "name": "Lipid Profile",
+            "description": "Comprehensive cholesterol and triglyceride assessment",
+            "price": "1800.00",
+            "duration": "P0DT8H",
+            "is_active": true
+        }
+    },
+    {
+        "model": "labapp.service",
+        "pk": 4,
+        "fields": {
+            "name": "PCR Test",
+            "description": "Infectious disease detection via polymerase chain reaction",
+            "price": "3500.00",
+            "duration": "P0DT6H",
+            "is_active": true
+        }
+    },
+    {
+        "model": "labapp.service",
+        "pk": 5,
+        "fields": {
+            "name": "X-Ray Imaging",
+            "description": "Digital radiography for bone and chest analysis",
+            "price": "3500.00",
+            "duration": "P0DT4H",
+            "is_active": false
+        }
+    }
+] 

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Admin Dashboard</h2>
+    
+    <!-- Statistics Cards -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Patients</h5>
+                    <h2 class="card-text">{{ total_patients }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Today's Appointments</h5>
+                    <h2 class="card-text">{{ today_appointments }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Reports</h5>
+                    <h2 class="card-text">{{ pending_reports }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'new_service' %}" class="btn btn-light btn-sm">Add Service</a>
+                        <a href="{% url 'generate_reports' %}" class="btn btn-light btn-sm">Generate Reports</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Bookings</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in recent_bookings %}
+                                <tr>
+                                    <td>{{ booking.user.get_full_name }}</td>
+                                    <td>{{ booking.service.name }}</td>
+                                    <td>{{ booking.date }}</td>
+                                    <td>
+                                        <span class="badge {% if booking.status == 'completed' %}bg-success
+                                                         {% elif booking.status == 'pending' %}bg-warning
+                                                         {% elif booking.status == 'cancelled' %}bg-danger
+                                                         {% else %}bg-secondary{% endif %}">
+                                            {{ booking.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if booking.status == 'pending' %}
+                                        <a href="{% url 'update_test_results' booking.report.id %}" class="btn btn-sm btn-primary">Update Results</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Reports</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in recent_reports %}
+                                <tr>
+                                    <td>{{ report.user.get_full_name }}</td>
+                                    <td>{{ report.service.name }}</td>
+                                    <td>
+                                        <span class="badge {% if report.status == 'completed' %}bg-success
+                                                         {% elif report.status == 'pending' %}bg-warning
+                                                         {% else %}bg-info{% endif %}">
+                                            {{ report.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if report.status == 'completed' %}
+                                        <a href="{% url 'download_report' report.id %}" class="btn btn-sm btn-success">Download</a>
+                                        {% else %}
+                                        <a href="{% url 'update_test_results' report.id %}" class="btn btn-sm btn-primary">Update</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

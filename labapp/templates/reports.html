@@ -1,0 +1,11 @@
+{% extends 'labapp/base.html' %}
+
+{% block content %}
+<h1>Your Reports</h1>
+{% for report in reports %}
+    <div>
+        <p>Service: {{ report.service.name }}</p>
+        <a href="{{ report.file.url }}">Download Report</a>
+    </div>
+{% endfor %}
+{% endblock %}

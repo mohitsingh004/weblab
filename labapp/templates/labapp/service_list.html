@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Available Services</h2>
+    
+    <div class="row">
+        {% for service in services %}
+            <div class="col-md-6 mb-4">
+                <div class="card {% if not service.is_active %}bg-light{% endif %}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.name }}</h5>
+                        <p class="card-text">{{ service.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-0"><strong>Price:</strong> ₹{{ service.price }}</p>
+                                <p class="mb-0"><small class="text-muted">Duration: {{ service.duration }}</small></p>
+                            </div>
+                            {% if service.is_active %}
+                                <a href="{% url 'book_service' service.id %}" class="btn btn-primary">Book Now</a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled>Currently Unavailable</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No services are currently available.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 
